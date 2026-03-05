@@ -44,15 +44,44 @@ Migration and platform architecture details are documented in:
 - `docs/kubernetes-configuration.md`
 - `docs/local-docker-development.md`
 
-### Local Infra via Docker Compose
+### Local Development Setup
 
-Start local PostgreSQL, Redis, and MinIO:
+To run Midday locally, you will need to install **Bun** natively on your machine, run Docker Compose for infrastructure, and configure your environment variables.
 
+#### 1. Install Bun
+Midday actively uses Bun as its package manager and runtime. Make sure you install the latest stable version of `bun` (version >=1.3.0 is required for Workspace Catalog support).
+```bash
+curl -fsSL https://bun.sh/install | bash
+source ~/.bashrc # or source ~/.zshrc
+```
+Then install project dependencies:
+```bash
+bun install
+```
+
+#### 2. Start Local Infrastructure
+Start the local PostgreSQL, Redis, and MinIO instances using Docker Compose:
 ```bash
 docker compose up -d
 ```
 
-Then follow:
+#### 3. Setup Environment Variables
+Before running the development servers, you need to configure your environment variables. Start by copying the template files to `.env` files:
+```bash
+cp apps/api/.env-template apps/api/.env
+cp apps/dashboard/.env-example apps/dashboard/.env.local
+cp apps/worker/.env-template apps/worker/.env
+```
+
+Ensure you configure dummy values or actual sandbox keys for required external API providers (like Plaid, GoCardless, Teller, Resend, and Exa) in these `.env` files to prevent the underlying services from crashing at boot. At a minimum, set `INTERNAL_API_KEY=dummy` inside `apps/worker/.env`.
+
+#### 4. Run the Dev Servers
+Finally, you can start the development servers:
+```bash
+bun run dev
+```
+
+For more detailed information, follow:
 - `docs/local-docker-development.md`
 
 ## App Architecture
