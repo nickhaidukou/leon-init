@@ -13,9 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="https://go.midday.ai/K7GwMoQ">
-    <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
-  </a>
+  <img src="https://img.shields.io/badge/Auth-Zitadel-1E4FFF?style=for-the-badge" alt="Zitadel" />
+  <img src="https://img.shields.io/badge/DB-PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Storage-Amazon%20S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white" alt="Amazon S3" />
 </p>
 
 ## About Midday
@@ -39,14 +39,20 @@ Midday is an all-in-one tool designed to help freelancers, contractors, consulta
 
 We are working on the documentation to get started with Midday for local development: https://docs.midday.ai
 
+Migration and platform architecture details are documented in:
+- `docs/post-supabase-architecture.md`
+
 ## App Architecture
 
 - Monorepo
 - Bun
 - React
 - TypeScript
-- Nextjs
-- Supabase
+- Next.js
+- Auth: Zitadel (OIDC/JWT + MFA)
+- Database: PostgreSQL + Drizzle
+- Storage: AWS S3-compatible object storage
+- Realtime: Internal WebSocket contract with polling fallback
 - Shadcn
 - Tauri
 - Expo
@@ -54,7 +60,8 @@ We are working on the documentation to get started with Midday for local develop
 
 ### Hosting
 
-- Supabase (database, storage, realtime, auth)
+- PostgreSQL (self-hosted or managed, outside Supabase)
+- AWS S3 (file/object storage)
 - Railway (API, Worker, Dashboard)
 - Vercel (Website)
 - Cloudflare (Engine, CDN/Proxy)
