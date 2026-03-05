@@ -10,6 +10,7 @@ This directory contains technical documentation for the Midday.
 - **[document-processing.md](./document-processing.md)** - Technical documentation of the document processing pipeline including AI classification, graceful degradation, retry functionality, and error handling.
 - **[database-connection-pooling.md](./database-connection-pooling.md)** - Database connection pooling setup with Supabase Supavisor (transaction mode), multi-region read replica mapping across Railway, pool configuration, and prepared statement constraints.
 - **[post-supabase-architecture.md](./post-supabase-architecture.md)** - Current architecture reference for the Supabase exit: Zitadel auth, PostgreSQL data layer, S3 storage, realtime contracts/fallback behavior, and migration status.
+- **[kubernetes-configuration.md](./kubernetes-configuration.md)** - Kubernetes deployment baseline for the post-Supabase stack, including namespace layout, required env/secret wiring, PostgreSQL/Redis setup, starter manifests, and cutover smoke tests.
 
 ## About
 
