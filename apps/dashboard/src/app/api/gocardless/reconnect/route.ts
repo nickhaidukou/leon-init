@@ -1,0 +1,42 @@
+import { cookies } from "next/headers";
+import { type NextRequest, NextResponse } from "next/server";
+import { getTRPCClient } from "@/trpc/server";
+import { Cookies } from "@/utils/constants";
+import { getUrl } from "@/utils/environment";
+
+export async function GET(req: NextRequest) {
+  const origin = getUrl();
+  const accessToken = (await cookies()).get(Cookies.AccessToken)?.value;
+
+  if (!accessToken) {
+    return NextResponse.redirect(new URL("/", origin));
+  }
+
+  const trpc = await getTRPCClient();
+  const requestUrl = new URL(req.url);
+  const id = requestUrl.searchParams.get("id");
+  const referenceId = requestUrl.searchParams.get("reference_id") ?? undefined;
+  const accessValidForDays = Number(
+    requestUrl.searchParams.get("access_valid_for_days"),
+  );
+  const isDesktop = requestUrl.searchParams.get("desktop");
+
+  if (id) {
+    await trpc.bankConnections.updateReconnectById.mutate({
+      id,
+      referenceId,
+      accessValidForDays: accessValidForDays || 180,
+    });
+  }
+
+  if (isDesktop === "true") {
+    const scheme = process.env.NEXT_PUBLIC_DESKTOP_SCHEME || "midday";
+    return NextResponse.redirect(
+      `${scheme}://settings/accounts?id=${id}&step=reconnect`,
+    );
+  }
+
+  return NextResponse.redirect(
+    `${origin}/settings/accounts?id=${id}&step=reconnect`,
+  );
+}
