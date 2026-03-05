@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+
 import {
   buildAuthorizationUrl,
   createPkcePair,
@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
   const returnTo = requestUrl.searchParams.get("return_to") || undefined;
   const client = requestUrl.searchParams.get("client") || undefined;
 
-  const { verifier, challenge } = createPkcePair();
-  const state = randomUUID();
+  const { verifier, challenge } = await createPkcePair();
+  const state = crypto.randomUUID();
 
   const callbackUrl = new URL("/api/auth/callback", origin).toString();
 

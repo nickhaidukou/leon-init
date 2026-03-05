@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from "node:crypto";
+
 import type { OidcTokenResponse, OpenIdConfiguration } from "./types";
 
 type BuildAuthorizationUrlParams = {
@@ -181,19 +181,24 @@ export async function refreshTokens({
   return postTokenRequest(config.token_endpoint, params);
 }
 
-export function createPkcePair() {
-  const verifier = randomBytes(64)
-    .toString("base64")
+function getBase64URLEncode(buffer: ArrayBuffer): string {
+  const binary = Array.from(new Uint8Array(buffer))
+    .map((b) => String.fromCharCode(b))
+    .join("");
+  return btoa(binary)
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
-    .replace(/=+$/g, "");
+    .replace(/=+$/, "");
+}
 
-  const challenge = createHash("sha256")
-    .update(verifier)
-    .digest("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/g, "");
+export async function createPkcePair() {
+  const verifierBytes = new Uint8Array(64);
+  crypto.getRandomValues(verifierBytes);
+  const verifier = getBase64URLEncode(verifierBytes.buffer);
+
+  const data = new TextEncoder().encode(verifier);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const challenge = getBase64URLEncode(hashBuffer);
 
   return {
     verifier,

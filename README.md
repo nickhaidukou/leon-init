@@ -41,6 +41,19 @@ We are working on the documentation to get started with Midday for local develop
 
 Migration and platform architecture details are documented in:
 - `docs/post-supabase-architecture.md`
+- `docs/kubernetes-configuration.md`
+- `docs/local-docker-development.md`
+
+### Local Infra via Docker Compose
+
+Start local PostgreSQL, Redis, and MinIO:
+
+```bash
+docker compose up -d
+```
+
+Then follow:
+- `docs/local-docker-development.md`
 
 ## App Architecture
 
